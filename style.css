@@ -5,21 +5,21 @@
 }
 
 body {
-    background: #f4f6f9;
+    background: rgb(34, 108, 129);
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
     padding: 2rem 1rem;
-    color: #1e293b;
+    color: #111a29;
 }
 
 main {
     width: 100%;
     max-width: 650px;
-    background: #ffffff;
-    border: 1px solid #dce1e8;
+    background: #f0a2a2;
+    border: 1px solid #000000;
     border-radius: 6px;
     padding: 1.8rem 1.5rem 2rem;
 }
@@ -29,7 +29,7 @@ h1 {
     font-weight: 600;
     margin-bottom: 1.5rem;
     color: #0f172a;
-    border-bottom: 2px solid #e9eef2;
+    border-bottom: 2px solid #0a0b0c;
     padding-bottom: 0.5rem;
 }
 
@@ -44,7 +44,7 @@ h1 {
 .task-form button {
     font-size: 0.95rem;
     padding: 0.6rem 0.8rem;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #080f18;
     border-radius: 4px;
     background: white;
     font-family: inherit;
