@@ -136,3 +136,54 @@ taskListEl.addEventListener('change', function(event) {
     toggleTaskCompletion(taskId);
   }
 });
+
+function startEditing(taskId) {
+  const task = tasks.find(t => t.id === taskId);
+  if (!task) return;
+  
+  const listItem = document.querySelector(`li[data-task-id="${taskId}"]`);
+  if (!listItem) return;
+  
+  listItem.innerHTML = `
+    <div class="inline-edit">
+      <input type="text" id="edit-title-${taskId}" value="${escapeHtml(task.title)}" style="flex:2;">
+      <button id="save-edit-${taskId}" data-action="save-edit" data-id="${taskId}">Save</button>
+      <button id="cancel-edit-${taskId}" data-action="cancel-edit" data-id="${taskId}">Cancel</button>
+    </div>
+  `;
+}
+
+function saveEdit(taskId) {
+  const titleInput = document.getElementById(`edit-title-${taskId}`);
+  if (!titleInput) return;
+  
+  const newTitle = titleInput.value.trim();
+  if (!newTitle) {
+    alert('Task title cannot be empty.');
+    return;
+  }
+  
+  tasks = tasks.map(task => {
+    if (task.id === taskId) {
+      return { ...task, title: newTitle };
+    }
+    return task;
+  });
+  
+  saveTasksToStorage(tasks);
+  renderTasks();
+}
+
+function cancelEditing(taskId) {
+  renderTasks();
+}
+
+// Update the click event handler to include:
+// Add these conditions in the existing taskListEl click handler
+if (action === 'edit') {
+  startEditing(taskId);
+} else if (action === 'save-edit') {
+  saveEdit(taskId);
+} else if (action === 'cancel-edit') {
+  cancelEditing(taskId);
+}
