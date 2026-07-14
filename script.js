@@ -78,3 +78,61 @@ addTaskForm.addEventListener('submit', function(e) {
 
 // Initial render
 renderTasks();
+
+function renderTasks() {
+  if (tasks.length === 0) {
+    taskListEl.innerHTML = '';
+    emptyStateEl.style.display = 'block';
+  } else {
+    emptyStateEl.style.display = 'none';
+    taskListEl.innerHTML = tasks.map(task => `
+      <li class="task-item ${task.completed ? 'completed-task' : ''}" data-task-id="${task.id}">
+        <div class="task-left">
+          <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} data-action="toggle" data-id="${task.id}">
+          <span class="task-title">${escapeHtml(task.title)}</span>
+        </div>
+        <div class="task-actions">
+          <button class="edit-btn" data-action="edit" data-id="${task.id}">Edit</button>
+          <button class="delete-btn" data-action="delete" data-id="${task.id}">Delete</button>
+        </div>
+      </li>
+    `).join('');
+  }
+}
+
+function toggleTaskCompletion(taskId) {
+  tasks = tasks.map(task => {
+    if (task.id === taskId) {
+      return { ...task, completed: !task.completed };
+    }
+    return task;
+  });
+  saveTasksToStorage(tasks);
+  renderTasks();
+}
+
+function deleteTask(taskId) {
+  tasks = tasks.filter(task => task.id !== taskId);
+  saveTasksToStorage(tasks);
+  renderTasks();
+}
+
+// Event delegation
+taskListEl.addEventListener('click', function(event) {
+  const target = event.target;
+  const action = target.getAttribute('data-action');
+  const taskId = target.getAttribute('data-id');
+
+  if (action === 'toggle') {
+    toggleTaskCompletion(taskId);
+  } else if (action === 'delete') {
+    deleteTask(taskId);
+  }
+});
+
+taskListEl.addEventListener('change', function(event) {
+  if (event.target.matches('input[type="checkbox"][data-action="toggle"]')) {
+    const taskId = event.target.getAttribute('data-id');
+    toggleTaskCompletion(taskId);
+  }
+});
