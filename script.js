@@ -187,3 +187,53 @@ if (action === 'edit') {
 } else if (action === 'cancel-edit') {
   cancelEditing(taskId);
 }
+
+let currentFilter = 'all';
+
+function getFilteredTasks() {
+  if (currentFilter === 'active') {
+    return tasks.filter(task => !task.completed);
+  } else if (currentFilter === 'completed') {
+    return tasks.filter(task => task.completed);
+  }
+  return tasks;
+}
+
+// Update renderTasks to use filtered tasks:
+function renderTasks() {
+  const filtered = getFilteredTasks();
+  
+  if (filtered.length === 0) {
+    taskListEl.innerHTML = '';
+    emptyStateEl.style.display = 'block';
+  } else {
+    emptyStateEl.style.display = 'none';
+    taskListEl.innerHTML = filtered.map(task => `
+      <!-- same task HTML -->
+    `).join('');
+  }
+}
+
+function setFilter(filter) {
+  currentFilter = filter;
+  
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    if (btn.getAttribute('data-filter') === filter) {
+      btn.classList.add('active-filter');
+    } else {
+      btn.classList.remove('active-filter');
+    }
+  });
+  
+  renderTasks();
+}
+
+// Add filter button listeners
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    setFilter(this.getAttribute('data-filter'));
+  });
+});
+
+// Set initial active filter
+document.querySelector('[data-filter="all"]').classList.add('active-filter');
