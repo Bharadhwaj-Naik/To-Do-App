@@ -237,3 +237,54 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // Set initial active filter
 document.querySelector('[data-filter="all"]').classList.add('active-filter');
+
+function startEditing(taskId) {
+  const task = tasks.find(t => t.id === taskId);
+  if (!task) return;
+  
+  const listItem = document.querySelector(`li[data-task-id="${taskId}"]`);
+  if (!listItem) return;
+  
+  listItem.innerHTML = `
+    <div class="inline-edit">
+      <input type="text" id="edit-title-${taskId}" value="${escapeHtml(task.title)}">
+      <input type="date" id="edit-date-${taskId}" value="${task.dueDate || ''}">
+      <select id="edit-priority-${taskId}">
+        <option value="low" ${task.priority === 'low' ? 'selected' : ''}>Low</option>
+        <option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Medium</option>
+        <option value="high" ${task.priority === 'high' ? 'selected' : ''}>High</option>
+      </select>
+      <button data-action="save-edit" data-id="${taskId}">Save</button>
+      <button data-action="cancel-edit" data-id="${taskId}">Cancel</button>
+    </div>
+  `;
+}
+
+function saveEdit(taskId) {
+  const titleInput = document.getElementById(`edit-title-${taskId}`);
+  const dateInput = document.getElementById(`edit-date-${taskId}`);
+  const priorityInput = document.getElementById(`edit-priority-${taskId}`);
+  
+  if (!titleInput) return;
+  
+  const newTitle = titleInput.value.trim();
+  if (!newTitle) {
+    alert('Task title cannot be empty.');
+    return;
+  }
+  
+  tasks = tasks.map(task => {
+    if (task.id === taskId) {
+      return {
+        ...task,
+        title: newTitle,
+        dueDate: dateInput?.value || '',
+        priority: priorityInput?.value || 'medium',
+      };
+    }
+    return task;
+  });
+  
+  saveTasksToStorage(tasks);
+  renderTasks();
+}
