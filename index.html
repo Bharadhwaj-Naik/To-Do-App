@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Task Manager · To-Do</title>
+  <title>To-Do App</title>
   <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
   <main aria-labelledby="app-heading">
-    <h1 id="app-heading">📋 Task Manager</h1>
+    <h1 id="app-heading"> Task Manager</h1>
 
-    <!-- add task section -->
     <form id="add-task-form" class="task-form" aria-label="Add new task">
       <input type="text" id="task-title-input" placeholder="Task title..." required autocomplete="off">
       <input type="date" id="task-date-input">
@@ -23,7 +22,6 @@
       <button type="submit">Add Task</button>
     </form>
 
-    <!-- filter controls -->
     <div class="filter-bar" role="group" aria-label="Filter tasks">
       <legend>Show:</legend>
       <button type="button" class="filter-btn active-filter" data-filter="all">All</button>
@@ -31,10 +29,8 @@
       <button type="button" class="filter-btn" data-filter="completed">Completed</button>
     </div>
 
-    <!-- task list container -->
     <section aria-label="Task list">
       <ul id="task-list" class="task-list">
-        <!-- dynamic tasks rendered here -->
       </ul>
       <div id="empty-state" class="empty-message" style="display: none;">No tasks to show.</div>
     </section>
